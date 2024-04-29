@@ -22,7 +22,7 @@ def evaluate(board):
     else:
         return 0
 
-
+# Minimax algorithm with alpha-beta pruning
 def minimax(board, depth, alpha, beta, maximizing_player):
     if game_over(board) or depth == 0:
         return evaluate(board)
@@ -62,7 +62,7 @@ def find_best_move(board):
         for j in range(3):
             if board[i][j] == ' ':
                 board[i][j] = 'X'
-                eval = minimax(board, 6, -np.inf, np.inf, False)  
+                eval = minimax(board, 6, -np.inf, np.inf, False) 
                 board[i][j] = ' '
                 if eval > best_eval:
                     best_eval = eval
@@ -78,11 +78,11 @@ def player_move(row, col):
         if game_over(board):
             game_over_flag = True
             if check_winner(board, 'X'):
-                result_label.config(text="AI wins!")
+                result_label.config(text="AI wins!", fg="red")
             elif check_winner(board, 'O'):
-                result_label.config(text="Player wins!")
+                result_label.config(text="Player wins!", fg="blue")
             else:
-                result_label.config(text="It's a tie!")
+                result_label.config(text="It's a tie!", fg="green")
         else:
             ai_move()
 
@@ -95,20 +95,20 @@ def ai_move():
     if game_over(board):
         game_over_flag = True
         if check_winner(board, 'X'):
-            result_label.config(text="AI wins!")
+            result_label.config(text="AI wins!", fg="red")
         elif check_winner(board, 'O'):
-            result_label.config(text="Player wins!")
+            result_label.config(text="Player wins!", fg="blue")
         else:
-            result_label.config(text="It's a tie!")
+            result_label.config(text="It's a tie!", fg="green")
 
 
 def update_board():
     for i in range(3):
         for j in range(3):
             if board[i][j] != ' ':
-                buttons[i][j].config(text=board[i][j], state=tk.DISABLED)
+                buttons[i][j].config(text=board[i][j], state=tk.DISABLED, bg="lightgray")
             else:
-                buttons[i][j].config(text=' ', state=tk.NORMAL)
+                buttons[i][j].config(text=' ', state=tk.NORMAL, bg="white")
 
 
 def reset_game():
@@ -116,8 +116,8 @@ def reset_game():
     board = np.array([[' ']*3]*3)
     game_over_flag = False
     update_board()
-    result_label.config(text="")
-
+    result_label.config(text="", fg="black")
+ 
 
 
 def create_ui():
