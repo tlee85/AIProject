@@ -1,19 +1,19 @@
 import tkinter as tk
 import numpy as np
 
-# Function to check if a player has won
+
 def check_winner(board, player):
-    # Check rows, columns, and diagonals
+
     return (np.all(board == player, axis=0).any() or        # Columns
             np.all(board == player, axis=1).any() or        # Rows
             np.all(np.diag(board) == player) or            # Main diagonal
             np.all(np.diag(np.fliplr(board)) == player))   # Anti-diagonal
 
-# Function to check if the game is over
+
 def game_over(board):
     return check_winner(board, 'X') or check_winner(board, 'O') or np.all(board != ' ')
 
-# Function to evaluate the score of the board
+
 def evaluate(board):
     if check_winner(board, 'X'):
         return 1
@@ -22,7 +22,7 @@ def evaluate(board):
     else:
         return 0
 
-# Minimax algorithm with alpha-beta pruning
+
 def minimax(board, depth, alpha, beta, maximizing_player):
     if game_over(board) or depth == 0:
         return evaluate(board)
@@ -54,7 +54,7 @@ def minimax(board, depth, alpha, beta, maximizing_player):
                         break
         return min_eval
 
-# Function to find the best move using minimax
+
 def find_best_move(board):
     best_eval = -np.inf
     best_move = None
@@ -69,8 +69,7 @@ def find_best_move(board):
                     best_move = (i, j)
     return best_move
 
-# Function to handle player's move
-# Function to handle player's move
+
 def player_move(row, col):
     global board, game_over_flag, ai_loading_label
     print("Player made a move at row:", row, "column:", col)
@@ -87,17 +86,15 @@ def player_move(row, col):
                 result_label.config(text="It's a tie!")
         else:
             ai_loading_label.config(text="AI is deciding...")
-            ai_move()  # Call ai_move immediately after player's move
+            ai_move()  
 
 
-# Function to handle AI's move
-# Function to handle AI's move
-# Function to handle AI's move
+
 def ai_move():
     global board, game_over_flag, ai_loading_label
     print("AI is making a move...")
     ai_loading_label.config(text="AI is deciding...")
-    board_copy = np.copy(board)  # Create a copy of the board
+    board_copy = np.copy(board) 
     ai_move = find_best_move(board_copy)
     print("AI's move:", ai_move)
     if ai_move is None:
@@ -117,7 +114,7 @@ def ai_move():
         ai_loading_label.config(text="")
 
 
-# Function to update the board UI
+
 def update_board():
     for i in range(3):
         for j in range(3):
@@ -126,7 +123,6 @@ def update_board():
             else:
                 buttons[i][j].config(text=' ', state=tk.NORMAL, bg='white')
 
-# Function to reset the game
 def reset_game():
     global board, game_over_flag
     board = np.array([[' ']*3]*3)
@@ -135,7 +131,7 @@ def reset_game():
     result_label.config(text="")
     ai_loading_label.config(text="")
 
-# Main function to create the UI
+
 def create_ui():
     global board, buttons, result_label, game_over_flag, ai_loading_label
 
@@ -165,5 +161,5 @@ def create_ui():
 
     root.mainloop()
 
-# Run the UI
+
 create_ui()
