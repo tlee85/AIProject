@@ -3,11 +3,11 @@ import numpy as np
 
 
 def check_winner(board, player):
-
-    return (np.all(board == player, axis=0).any() or        # Columns
-            np.all(board == player, axis=1).any() or        # Rows
-            np.all(np.diag(board) == player) or            # Main diagonal
-            np.all(np.diag(np.fliplr(board)) == player))   # Anti-diagonal
+   
+    return (np.all(board == player, axis=0).any() or        
+            np.all(board == player, axis=1).any() or        
+            np.all(np.diag(board) == player) or            
+            np.all(np.diag(np.fliplr(board)) == player))   
 
 
 def game_over(board):
@@ -62,7 +62,7 @@ def find_best_move(board):
         for j in range(3):
             if board[i][j] == ' ':
                 board[i][j] = 'X'
-                eval = minimax(board, 4, -np.inf, np.inf, False)
+                eval = minimax(board, 6, -np.inf, np.inf, False)  
                 board[i][j] = ' '
                 if eval > best_eval:
                     best_eval = eval
@@ -71,8 +71,7 @@ def find_best_move(board):
 
 
 def player_move(row, col):
-    global board, game_over_flag, ai_loading_label
-    print("Player made a move at row:", row, "column:", col)
+    global board, game_over_flag
     if board[row][col] == ' ' and not game_over_flag:
         board[row][col] = 'O'
         update_board()
@@ -85,21 +84,12 @@ def player_move(row, col):
             else:
                 result_label.config(text="It's a tie!")
         else:
-            ai_loading_label.config(text="AI is deciding...")
-            ai_move()  
-
+            ai_move()
 
 
 def ai_move():
-    global board, game_over_flag, ai_loading_label
-    print("AI is making a move...")
-    ai_loading_label.config(text="AI is deciding...")
-    board_copy = np.copy(board) 
-    ai_move = find_best_move(board_copy)
-    print("AI's move:", ai_move)
-    if ai_move is None:
-        print("AI couldn't find a valid move.")
-        return
+    global board, game_over_flag
+    ai_move = find_best_move(board)
     board[ai_move[0]][ai_move[1]] = 'X'
     update_board()
     if game_over(board):
@@ -110,18 +100,16 @@ def ai_move():
             result_label.config(text="Player wins!")
         else:
             result_label.config(text="It's a tie!")
-    else:
-        ai_loading_label.config(text="")
-
 
 
 def update_board():
     for i in range(3):
         for j in range(3):
             if board[i][j] != ' ':
-                buttons[i][j].config(text=board[i][j], state=tk.DISABLED, bg='lightgray')
+                buttons[i][j].config(text=board[i][j], state=tk.DISABLED)
             else:
-                buttons[i][j].config(text=' ', state=tk.NORMAL, bg='white')
+                buttons[i][j].config(text=' ', state=tk.NORMAL)
+
 
 def reset_game():
     global board, game_over_flag
@@ -129,11 +117,11 @@ def reset_game():
     game_over_flag = False
     update_board()
     result_label.config(text="")
-    ai_loading_label.config(text="")
+
 
 
 def create_ui():
-    global board, buttons, result_label, game_over_flag, ai_loading_label
+    global board, buttons, result_label, game_over_flag
 
     root = tk.Tk()
     root.title("Tic Tac Toe")
@@ -153,9 +141,6 @@ def create_ui():
 
     reset_button = tk.Button(root, text='Reset', font=('Arial', 12), width=10, height=2, command=reset_game)
     reset_button.grid(row=4, columnspan=3, padx=5, pady=5)
-
-    ai_loading_label = tk.Label(root, text='', font=('Arial', 12))
-    ai_loading_label.grid(row=5, columnspan=3, padx=5, pady=5)
 
     reset_game()
 
